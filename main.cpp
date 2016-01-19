@@ -7,24 +7,31 @@
 #include <float.h>
 #include "Point.h"
 
-float distance(Point p1, Point p2) {
-	float xs = (p2.getX() - p1.getX()) * (p2.getX() - p1.getX());
-	float ys = (p2.getY() - p1.getY()) * (p2.getY() - p1.getY());
+double distance(Point p1, Point p2) {
+	double xs = (p2.getX() - p1.getX()) * (p2.getX() - p1.getX());
+	double ys = (p2.getY() - p1.getY()) * (p2.getY() - p1.getY());
 	return sqrt(xs + ys);
 }
 
-float bruteForce(std::vector<Point> points) {
-	std::cout << "entering brute force" << std::endl;
-	float smallestDistance = FLT_MAX;
+std::vector<Point> bruteForce(std::vector<Point> points) {
+	
+	std::vector<Point> pair;
+	pair.push_back(Point(0,0));
+	pair.push_back(Point(0,0));
+	double smallestDistance = DBL_MAX;
 	int n = points.size();
 	for (int i = 0; i < n; i++) {
 		for (int j = i+1; j < n; j++) {
 			if (distance(points[i],points[j]) < smallestDistance)
+			{
 				smallestDistance = distance(points[i], points[j]);
+				pair[0] = points[i];
+				pair[1] = points[j];
+			}
 	}
-}
+}	
 
-	return smallestDistance;
+	return pair;
 
 }
 
@@ -38,8 +45,8 @@ int main(int argc, char *argv[]) {
 	while (std::getline(std::cin, line))
 	{
 		std::istringstream iss(line);
-		float first;
-		float second;
+		double first;
+		double second;
 		//std::string third;
 		iss >> first >> second;
 		if (!iss)
@@ -63,6 +70,11 @@ int main(int argc, char *argv[]) {
 	// 	i++;
 	// }
 
-	float min = bruteForce(myVector);
+	std::vector<Point> pair = bruteForce(myVector);
+	double min = distance(pair[0], pair[1]);
 	std::cout << "closest pair distance: " << min << std::endl; 
+	pair[0].toString();
+	std::cout << " ";
+	pair[1].toString();
+	std::cout << std::endl;
 }
