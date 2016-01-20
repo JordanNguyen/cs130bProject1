@@ -26,7 +26,13 @@ int main(int argc, char *argv[]) {
 	
 	else if (option == "brute")
 	{
-		bruteForce(getPoints());
+	  //bruteForce(getPoints());
+	  std::vector<Point> test = getPoints();
+	  for (int i = 0; i < test.size(); i++)
+	    {
+	      test[i].toString();
+	      std::cout << std::endl;
+	    }
 		return 0;
 	}
 
