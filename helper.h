@@ -11,6 +11,17 @@
 #include "Point.h"
 
 
+bool containsPoint(std::vector<Point> points, Point p)
+{
+  for (int i = 0; i < points.size(); i++)
+    {
+      if (p == points[i])
+	return true;
+    }
+
+  return false;
+}
+
 /* still need to implement case with <2 or >2 inputs given */
 std::vector<Point> getPoints() {
 
@@ -36,7 +47,10 @@ std::vector<Point> getPoints() {
 			iss.clear();
 			continue;
 		}
-		myVector.push_back(Point(first,second));
+		if (containsPoint(myVector, Point(first,second)))
+		    continue;
+		else
+		  myVector.push_back(Point(first,second));
 	}
 
 	return myVector;
@@ -60,11 +74,7 @@ void printPairs(std::vector<Point> pairs, int dist) {
 	}
 }
 
-/* need to implement way to return multiple pairs  
-   -push points to vector if new min distance found. 
-   -if new min distance found, clear the vector and push new
-   -if same min distance is found, push to vector 
-   -implement a print function so it prints the pairs in order */
+/* need to implement way to put pairs in order into vector*/
 void bruteForce(std::vector<Point> points) {
 	
 	std::vector<Point> pair;
