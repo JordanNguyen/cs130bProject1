@@ -13,13 +13,13 @@
 
 bool containsPoint(std::vector<Point> points, Point p)
 {
-  for (int i = 0; i < points.size(); i++)
-    {
-      if (p == points[i])
-	return true;
-    }
+	for (int i = 0; i < points.size(); i++)
+	{
+		if (p == points[i])
+			return true;
+	}
 
-  return false;
+	return false;
 }
 
 /* still need to implement case with <2 or >2 inputs given */
@@ -29,15 +29,15 @@ std::vector<Point> getPoints() {
 	std::string line;
 	while (std::getline(std::cin, line))
 	{
-	  int count = 0;
-	  std::istringstream check(line);
-	  std::string input;
-	  while(check >> input)
-	    count++;
+		int count = 0;
+		std::istringstream check(line);
+		std::string input;
+		while(check >> input)
+			count++;
 
-	  if (count > 2)
-	    continue;
-	  
+		if (count > 2)
+			continue;
+		
 		std::istringstream iss(line);
 		double first;
 		double second;
@@ -48,9 +48,9 @@ std::vector<Point> getPoints() {
 			continue;
 		}
 		if (containsPoint(myVector, Point(first,second)))
-		    continue;
+			continue;
 		else
-		  myVector.push_back(Point(first,second));
+			myVector.push_back(Point(first,second));
 	}
 
 	return myVector;
