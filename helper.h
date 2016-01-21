@@ -31,7 +31,7 @@ double distance(Point p1, Point p2) {
 
 std::vector<Pair> minPair(std::vector<Pair> pairs1, std::vector<Pair> pairs2)
 {
-	std::cout << "entered min pair with pairs1 size " << pairs1.size() << " and pairs2 size " << pairs2.size() << std::endl;
+	// std::cout << "entered min pair with pairs1 size " << pairs1.size() << " and pairs2 size " << pairs2.size() << std::endl;
 	if (pairs1.size() == 0 && pairs2.size() == 0)
 		// std::cout << "we fucked up" <<std::endl;
 
@@ -49,7 +49,7 @@ std::vector<Pair> minPair(std::vector<Pair> pairs1, std::vector<Pair> pairs2)
 
 	if (fabs(distance(pairs1[0].p1, pairs1[0].p2) - distance(pairs2[0].p1, pairs2[0].p2)) < tolerance)
 	{
-		std::cout << "same dist" << std::endl;
+		// std::cout << "same dist" << std::endl;
 		std::vector<Pair> combined = pairs1;
 		// std::cout << "combined = pairs1" << std::endl;
 		for (int i = 0; i < pairs2.size(); i++)
@@ -190,7 +190,7 @@ std::vector<Point> getPoints() {
 void printPairs(std::vector<Pair> pairs) {
 	
 	std::cout.precision(7);
-	std::cout << "number of pairs: " << pairs.size() << std::endl;
+	// std::cout << "number of pairs: " << pairs.size() << std::endl;
 	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	std::sort(pairs.begin(), pairs.end(), comparePairs());
 	for (int i = 0; i < pairs.size(); i++) {
@@ -312,7 +312,7 @@ std::vector<Pair> bruteForcePairs(std::vector<Point> points)
 
 std::vector<Pair> stripClosest(std::vector<Point> points, int size, double d)
 {
-	std::cout << "entered stripclosest with vector sized" << points.size() << std::endl;
+	// std::cout << "entered stripclosest with vector sized" << points.size() << std::endl;
 	double min = d;
 	std::vector<Pair> pairs;
 	std::sort(points.begin(), points.end(), compareY());
