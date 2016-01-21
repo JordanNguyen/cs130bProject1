@@ -51,9 +51,19 @@ int main(int argc, char *argv[]) {
 
 		else if (option == "basic")
 		{
-			return -1;
-		}
+			std::vector<Point> result = getPoints();
+			if (result.size() < 2)
+			{
+				std::cout << "Not enough points to compute closest pair. Program closing." << std::endl;
+				return -1;
+			}
 
+			else
+			{
+		    std::cout << basicSort(result) << std::endl;
+			}
+
+		}
 		else if (option == "optimal")
 		{
 			return -1;
