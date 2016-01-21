@@ -10,6 +10,7 @@ public:
 	double y;
 
 	Point(double xcor, double ycor) { x = xcor; y = ycor; }
+	Point() {x = 0; y = 0;}
 	~Point() {}
 	void toString() { std::cout << "(" << x << ", " << y << ")"; }
 

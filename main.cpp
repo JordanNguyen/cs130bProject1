@@ -7,6 +7,7 @@
 #include <cfloat>
 #include "Point.h"
 #include "helper.h"
+#include "Pair.h"
 
 int main(int argc, char *argv[]) {
 

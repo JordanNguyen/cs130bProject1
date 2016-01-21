@@ -10,6 +10,7 @@
 #include <cfloat>
 #include <iomanip>
 #include "Point.h"
+#include "Pair.h"
 
 
 struct compareX
@@ -25,6 +26,22 @@ struct compareY
 	inline bool operator() (const Point &p1, const Point &p2)
 	{
 		return (p1.y < p2.y);
+	}
+};
+
+struct compareXPairs
+{
+	inline bool operator() (const Pair &pair1, const Pair &pair2)
+	{
+		return (pair1.p1.x < pair2.p2.x);
+	}
+};
+
+struct compareYPairs
+{
+	inline bool operator() (const Pair &pair1, const Pair &pair2)
+	{
+		return (pair1.p1.y < pair2.p2.y);
 	}
 };
 
@@ -80,7 +97,7 @@ double distance(Point p1, Point p2) {
 	return sqrt(xs + ys);
 }
 
-void printPairs(std::vector<Point> pairs, int dist) {
+void printPairs(std::vector<Point> pairs, double dist) {
 	
 	std::cout.precision(7);
 	std::cout << "closest pair distance: " << dist << std::endl;
@@ -154,6 +171,11 @@ void bruteForce(std::vector<Point> points) {
 	
 	return printPairs(pair, minDistance);
 }
+
+// double basicSort(std::vector<Point> points)
+// {
+// 	points.sort(points.begin(), points.)
+// }
 
 
 
