@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 
 			else
 			{
-				std::cout << "entering basic sort alg" << std::endl;
+				//std::cout << "entering basic sort alg" << std::endl;
 		    basicSort(result);
 			}
 
