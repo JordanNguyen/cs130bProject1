@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	
 	else if (option == "brute")
 	{
-		
+
 		std::vector<Point> result = getPoints();
 		if (result.size() < 2)
 		{
@@ -35,14 +35,18 @@ int main(int argc, char *argv[]) {
 		}
 
 		else
-	    //bruteForce(result);
-			for (int i = 0; i < result.size(); i++)
-			{
-				result[i].toString();
-				std::cout << std::endl;
-			}
-			return 0;
+		{
+	    bruteForce(result);
+	  //   std::sort(result.begin(), result.end(), compareY());
+			// for (int i = 0; i < result.size(); i++)
+			// {
+			// 	result[i].toString();
+			// 	std::cout << std::endl;
+			// }
+			// return 0;
 		}
+
+	}
 
 		else if (option == "basic")
 		{

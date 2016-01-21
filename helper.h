@@ -8,8 +8,25 @@
 #include <sstream>
 #include <limits>
 #include <cfloat>
+#include <iomanip>
 #include "Point.h"
 
+
+struct compareX
+{
+	inline bool operator() (const Point &p1, const Point &p2)
+	{
+		return (p1.x < p2.x);
+	}
+};
+
+struct compareY
+{
+	inline bool operator() (const Point &p1, const Point &p2)
+	{
+		return (p1.y < p2.y);
+	}
+};
 
 bool containsPoint(std::vector<Point> points, Point p)
 {
@@ -37,7 +54,7 @@ std::vector<Point> getPoints() {
 
 		if (count > 2)
 			continue;
-		
+
 		std::istringstream iss(line);
 		double first;
 		double second;
@@ -65,6 +82,7 @@ double distance(Point p1, Point p2) {
 
 void printPairs(std::vector<Point> pairs, int dist) {
 	
+	std::cout.precision(7);
 	std::cout << "closest pair distance: " << dist << std::endl;
 	for (int i = 0; i < pairs.size(); i = i+2) {
 		pairs[i].toString();
