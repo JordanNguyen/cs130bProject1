@@ -68,6 +68,6 @@ int main(int argc, char *argv[]) {
 		}
 		else if (option == "optimal")
 		{
-			return -1;
+			std::cout << distance(Point(9636.54, 1379.17), Point(9641.42, 3404.37)) << std::endl;
 		}
 	}

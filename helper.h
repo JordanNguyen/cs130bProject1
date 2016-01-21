@@ -194,10 +194,11 @@ void printPairs(std::vector<Pair> pairs) {
 	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	std::sort(pairs.begin(), pairs.end(), comparePairs());
 	for (int i = 0; i < pairs.size(); i++) {
-		pairs[i].toString();
-		//std::cout << " ";
-		//pairs[i+1].toString();
-		std::cout << std::endl;
+		if (distance(pairs[i].p1, pairs[i].p2) - distance(pairs[0].p1,pairs[0].p2) < .0000001)
+		{	
+			pairs[i].toString();
+			std::cout << std::endl;
+		}
 	}
 }
 
@@ -427,12 +428,13 @@ std::vector<Pair> basicSortRec(std::vector<Point> points) {
 		if ((fabs(points[i].x - middle.x)) <= distance(minBoth[0].p1, minBoth[0].p2) && points[i] != middle)
 		{
 			strip.push_back(points[i]);
-			// std::cout << "pushed point ";
+			//std::cout << "pushed point ";
 			// points[i].toString();
 		 //  std::cout << "\n";
 		}
 	}
-	strip.push_back(middle);
+	if (!strip.empty())
+		strip.push_back(middle);
 	//std::cout << "entered recursive strip"  << std::endl;
 	return minPair(minBoth, stripClosest(strip, strip.size(), distance(minBoth[0].p1, minBoth[0].p2)));
 
