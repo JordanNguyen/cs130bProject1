@@ -9,7 +9,7 @@
 #include "helper.h"
 
 
-void randomInput(int n)
+void randomInput(long int n)
 {
 	srand(time(NULL));
 	int min = -10000;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
 	std::string option = argv[1];
 	std::istringstream buffer(option);
-	int value;
+	long int value;
 	buffer >> value; 
 	randomInput(value);
 	return 0;

@@ -12,6 +12,8 @@
 #include "Point.h"
 #include "Pair.h"
 
+const double tolerance = .0000001;
+
 double min(double x1, double x2)
 {
 	if (x1 <= x2)
@@ -19,11 +21,73 @@ double min(double x1, double x2)
 	return x2;
 }
 
+
+double distance(Point p1, Point p2) {
+	
+	double xs = pow((p2.x - p1.x),2);
+	double ys = pow((p2.y - p1.y),2);
+	return sqrt(xs + ys);
+}
+
+std::vector<Pair> minPair(std::vector<Pair> pairs1, std::vector<Pair> pairs2)
+{
+	std::cout << "entered min pair with pairs1 size " << pairs1.size() << " and pairs2 size " << pairs2.size() << std::endl;
+	if (pairs1.size() == 0 && pairs2.size() == 0)
+		std::cout << "we fucked up" <<std::endl;
+
+	if (pairs1.size() == 0 && pairs2.size() != 0)
+	{
+		std::cout <<"pairs2 return from minPair" << std::endl;
+		return pairs2;
+	}
+
+	if (pairs1.size() != 0 && pairs2.size() == 0)
+	{
+		std::cout <<"pairs1 return from minPair" << std::endl;
+		return pairs1;
+	}
+
+	if (fabs(distance(pairs1[0].p1, pairs1[0].p2) - distance(pairs2[0].p1, pairs2[0].p2)) < tolerance)
+	{
+		std::cout << "same dist??" << std::endl;
+		std::vector<Pair> combined = pairs1;
+		std::cout << "combined = pairs1" << std::endl;
+		for (int i = 0; i < pairs2.size(); i++)
+		{
+			combined.push_back(pairs2[i]);
+		}
+		std::cout << "return combined size " << combined.size() << std::endl;
+		return combined;
+	}
+
+	else if (distance(pairs1[0].p1, pairs1[0].p2) < distance(pairs2[0].p1, pairs2[0].p2))
+	{
+		std::cout << "exit min pair" << std::endl;
+		return pairs1;
+	}
+	else if (distance(pairs1[0].p1, pairs1[0].p2) > distance(pairs2[0].p1, pairs2[0].p2))
+	{
+		std::cout << "exit min pair" << std::endl;
+		return pairs2;
+	}
+	
+}
+
 struct compareX
 {
 	inline bool operator() (const Point &p1, const Point &p2)
 	{
-		return (p1.x < p2.x);
+		if (p1.x < p2.x)
+			return true;
+		else if (p1.x > p2.x)
+			return false;
+		else if (fabs(p1.x - p2.x) < tolerance)
+		{
+			if (p1.y < p2.y)
+				return true;
+			else
+				return false;
+		}
 	}
 };
 
@@ -31,7 +95,17 @@ struct compareY
 {
 	inline bool operator() (const Point &p1, const Point &p2)
 	{
-		return (p1.y < p2.y);
+		if (p1.y < p2.y)
+			return true;
+		else if (p1.y > p2.y)
+			return false;
+		else if (fabs(p1.y - p2.y) < tolerance)
+		{
+			if (p1.x < p2.x)
+				return true;
+			else
+				return false;
+		}
 	}
 };
 
@@ -41,8 +115,15 @@ struct comparePairs
 	{
 		if (pair1.p1.x < pair2.p2.x)
 			return true;
-		else if (pair1.p1.x == pair2.p2.x)
-			return (pair1.p1.y <= pair2.p2.y);
+		else if (pair1.p1.x > pair2.p2.x)
+			return false;
+		else if (fabs(pair1.p1.x - pair2.p2.x) < tolerance)
+			{
+				if (pair1.p1.y < pair2.p2.y)
+					return true;
+				else
+					return false;
+			}
 	}
 };
 
@@ -107,18 +188,11 @@ std::vector<Point> getPoints() {
 	return myVector;
 }
 
-double distance(Point p1, Point p2) {
-	
-	double xs = pow((p2.x - p1.x),2);
-	double ys = pow((p2.y - p1.y),2);
-	return sqrt(xs + ys);
-}
-
-void printPairs(std::vector<Pair> pairs, double dist) {
+void printPairs(std::vector<Pair> pairs) {
 	
 	std::cout.precision(7);
-	// std::cout << "number of pairs: " << pairs.size() << std::endl;
-	std::cout << "closest pair distance: " << dist << std::endl;
+	std::cout << "number of pairs: " << pairs.size() << std::endl;
+	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	std::sort(pairs.begin(), pairs.end(), comparePairs());
 	for (int i = 0; i < pairs.size(); i++) {
 		pairs[i].toString();
@@ -136,7 +210,27 @@ void bruteForce(std::vector<Point> points) {
 	int n = points.size();
 	for (int i = 0; i < n; i++) {
 		for (int j = i+1; j < n; j++) {
-			if (distance(points[i],points[j]) < minDistance) //new min found, clear vector
+			if (fabs(distance(points[i],points[j]) - minDistance) < tolerance) //another min pair found, add to vector
+			{
+				// std::cout << "same min dist found" << std::endl;
+				if (points[i].x < points[j].x) //compare x values. i then j
+				{
+					pairs.push_back(Pair(points[i], points[j]));
+				}
+				else if (points[i].x > points[j].x) //j then i
+				{
+					pairs.push_back(Pair(points[j], points[i]));
+				}
+				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+				{
+					pairs.push_back(Pair(points[i], points[j]));
+				}
+				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+				{
+					pairs.push_back(Pair(points[j], points[i]));
+				}
+			}
+			else if (distance(points[i],points[j]) < minDistance) //new min found, clear vector
 			{
 				//std::cout << "new min dist found" << std::endl;
 				minDistance = distance(points[i], points[j]);
@@ -158,10 +252,103 @@ void bruteForce(std::vector<Point> points) {
 					pairs.push_back(Pair(points[j], points[i]));
 				}
 			}
+		}
+	}	
+	
+	return printPairs(pairs);
+}
 
-			else if (fabs(distance(points[i],points[j]) - minDistance) < .0000001) //another min pair found, add to vector
+std::vector<Pair> bruteForcePairs(std::vector<Point> points)
+// {
+// 	std::cout << "entered brute force with vector size " << points.size() << std::endl;
+// 	std::vector<Pair> pairs;
+// 	double minDistance = DBL_MAX;
+// 	int n = points.size();
+// 	for (int i = 0; i < n; i++) {
+// 		for (int j = i+1; j < n; j++) {
+
+// 			if (fabs(distance(points[i],points[j]) - minDistance) < tolerance) //another min pair found, add to vector
+// 			{
+// 				// std::cout << "same min dist found" << std::endl;
+// 				if (points[i].x < points[j].x) //compare x values. i then j
+// 				{
+// 					pairs.push_back(Pair(points[i], points[j]));
+// 				}
+// 				else if (points[i].x > points[j].x) //j then i
+// 				{
+// 					pairs.push_back(Pair(points[j], points[i]));
+// 				}
+// 				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+// 				{
+// 					pairs.push_back(Pair(points[i], points[j]));
+// 				}
+// 				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+// 				{
+// 					pairs.push_back(Pair(points[j], points[i]));
+// 				}
+// 			}
+
+// 			else if (distance(points[i],points[j]) < minDistance) //new min found, clear vector
+// 			{
+// 				//std::cout << "new min dist found" << std::endl;
+// 				minDistance = distance(points[i], points[j]);
+// 				pairs.clear();
+// 				if (points[i].x < points[j].x) //compare x values. i then j
+// 				{
+// 					pairs.push_back(Pair(points[i], points[j]));
+// 				}
+// 				else if (points[i].x > points[j].x) //j then i
+// 				{
+// 					pairs.push_back(Pair(points[j], points[i]));
+// 				}
+// 				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+// 				{
+// 					pairs.push_back(Pair(points[i], points[j]));
+// 				}
+// 				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+// 				{
+// 					pairs.push_back(Pair(points[j], points[i]));
+// 				}
+// 			}
+// 		}
+// 	}	
+	
+// 	std::cout << "exit brute force with vector sized " << pairs.size() << std::endl;
+// 	return pairs;	
+	
+// }
+{
+	
+	std::vector<Pair> pairs;
+	double minDistance = DBL_MAX;
+	int n = points.size();
+	for (int i = 0; i < n; i++) {
+		for (int j = i+1; j < n; j++) {
+			if (fabs(distance(points[i],points[j]) - minDistance) < tolerance) //another min pair found, add to vector
 			{
 				// std::cout << "same min dist found" << std::endl;
+				if (points[i].x < points[j].x) //compare x values. i then j
+				{
+					pairs.push_back(Pair(points[i], points[j]));
+				}
+				else if (points[i].x > points[j].x) //j then i
+				{
+					pairs.push_back(Pair(points[j], points[i]));
+				}
+				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+				{
+					pairs.push_back(Pair(points[i], points[j]));
+				}
+				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+				{
+					pairs.push_back(Pair(points[j], points[i]));
+				}
+			}
+			else if (distance(points[i],points[j]) < minDistance) //new min found, clear vector
+			{
+				//std::cout << "new min dist found" << std::endl;
+				minDistance = distance(points[i], points[j]);
+				pairs.clear();
 				if (points[i].x < points[j].x) //compare x values. i then j
 				{
 					pairs.push_back(Pair(points[i], points[j]));
@@ -182,38 +369,76 @@ void bruteForce(std::vector<Point> points) {
 		}
 	}	
 	
-	return printPairs(pairs, minDistance);
+	return pairs;
 }
 
-double bruteForceDist(std::vector<Point> points)
+std::vector<Pair> stripClosest(std::vector<Point> points, int size, double d)
 {
-	double minDistance = DBL_MAX;
-	int n = points.size();
-	for (int i = 0; i < n; i++) 
-		for (int j = i+1; j < n; j++) 
-			if (distance(points[i],points[j]) < minDistance)
-				minDistance = distance(points[i], points[j]);
-			
-	return minDistance;
-}
-
-double stripClosest(std::vector<Point> points, int size, double d)
-{
+	std::cout << "entered stripclosest with vector sized" << points.size() << std::endl;
 	double min = d;
+	std::vector<Pair> pairs;
 	std::sort(points.begin(), points.end(), compareY());
 
-	for (int i = 0; i < size; i++)
-			for (int j = i+1; j < size && (points[j].y - points[i].y) < min; j++)
-				if (distance(points[i],points[j]) < min)
+	for (int i = 0; i < size; i++) {
+			for (int j = i+1; j < size && (points[j].y - points[i].y) < min; j++) {
+				if (fabs(distance(points[i],points[j]) - min) < tolerance) //another min pair found, add to vector
+				{
+					// std::cout << "same min dist found" << std::endl;
+					if (points[i].x < points[j].x) //compare x values. i then j
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x > points[j].x) //j then i
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+					else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+				}
+				else if (distance(points[i],points[j]) < min)
+				{
+					std::cout << "new min found" << std::endl;
 					min = distance(points[i], points[j]);
-
-	return min;
+					pairs.clear();
+					if (points[i].x < points[j].x) //compare x values. i then j
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x > points[j].x) //j then i
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+					else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+				}
+			}
+		}	
+	
+	std::cout << "exit strip closest with vector sized " << pairs.size() << std::endl;
+	return pairs;	
 }
 
-double basicSortRec(std::vector<Point> points) {
+std::vector<Pair> basicSortRec(std::vector<Point> points) {
 
-	if (points.size() < 3)
-		return bruteForceDist(points);
+	std::cout << "entered recursive with " << points.size() << std::endl;
+
+	if (points.size() <= 3)
+	{
+		std::cout << "reached base case" << std::endl;
+		return bruteForcePairs(points);
+	}
 
 	int mid = points.size()/2;
 	Point middle = points[mid];
@@ -221,31 +446,39 @@ double basicSortRec(std::vector<Point> points) {
 	std::vector<Point>::const_iterator first = points.begin();
 	std::vector<Point>::const_iterator last  = points.begin() + mid;
 	std::vector<Point> leftPoints(first, last);
-	double minLeft  = basicSortRec(leftPoints);
+	std::vector<Point>::const_iterator first2 = points.begin() + mid + 1;
+	std::vector<Point>::const_iterator last2  = points.end();
+	//std::cout << "entered recursive left" << std::endl;
+	//std::vector<Pair> minLeft  = basicSortRec(leftPoints);
+	std::vector<Point> rightPoints(first2, last2);
 
-	first = points.begin() + mid + 1;
-	last  = points.end();
-	std::vector<Point> rightPoints(first, last);
-	double minRight = basicSortRec(rightPoints);
+	// std::cout << "entered recursive right" << std::endl;
+	//std::vector<Pair> minRight = basicSortRec(rightPoints);
 
-	double minBoth = min(minLeft, minRight);
+	std::vector<Pair> minBoth = minPair(basicSortRec(leftPoints), basicSortRec(rightPoints));
+	//std::vector<Pair> minBoth = minPair(minLeft, minRight);
+	std::cout << "exit min pair" << std::endl;
 
 	std::vector<Point> strip;
+	std::cout << "enter for loop for strip" << std::endl;
 	for (int i = 0; i < points.size(); i++)
-	{
-		if ((fabs(points[i].x - middle.x)) < minBoth)
-			{ strip.push_back(points[i]); }
-	}
+		if ((fabs(points[i].x - middle.x)) < distance(minBoth[0].p1, minBoth[0].p2))
+			strip.push_back(points[i]);
 	
-	return min(minBoth, stripClosest(strip, strip.size(), minBoth));
+	std::cout << "entered recursive strip"  << std::endl;
+	return minPair(minBoth, stripClosest(strip, strip.size(), distance(minBoth[0].p1, minBoth[0].p2)));
 
 }
 
-double basicSort(std::vector<Point> points)
+void basicSort(std::vector<Point> points)
 {
-	std::sort(points.begin(), points.end(), compareX());
 
-	return basicSortRec(points);
+	std::cout << "sorting" << std::endl;
+	std::sort(points.begin(), points.end(), compareX());
+	std::cout << "sorted" << std::endl;
+	//std::vector<Pair> pairs;
+
+	printPairs(basicSortRec(points));
 }
 
 
