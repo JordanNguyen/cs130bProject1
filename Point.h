@@ -21,6 +21,14 @@ public:
 		else
 			return false;
 	}
+
+	bool operator!=(Point p1)
+	{
+		if ((fabs(p1.x - x) < .0000001) && (fabs(p1.y - y) < .0000001))
+			return false;
+		else
+			return true;
+	}
 };
 
 #endif

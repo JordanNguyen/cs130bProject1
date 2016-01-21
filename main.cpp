@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
 
 		else
 		{
-	    bruteForce(result);
+	    //bruteForce(result);
+	    printPairs(bruteForcePairs(result));
 	  //   std::sort(result.begin(), result.end(), compareY());
 			// for (int i = 0; i < result.size(); i++)
 			// {
