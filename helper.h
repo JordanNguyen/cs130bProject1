@@ -33,7 +33,6 @@ std::vector<Pair> minPair(std::vector<Pair> pairs1, std::vector<Pair> pairs2)
 {
 	// std::cout << "entered min pair with pairs1 size " << pairs1.size() << " and pairs2 size " << pairs2.size() << std::endl;
 	if (pairs1.size() == 0 && pairs2.size() == 0)
-		// std::cout << "we fucked up" <<std::endl;
 
 	if (pairs1.size() == 0 && pairs2.size() != 0)
 	{
@@ -193,6 +192,10 @@ void printPairs(std::vector<Pair> pairs) {
 	// std::cout << "number of pairs: " << pairs.size() << std::endl;
 	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	std::sort(pairs.begin(), pairs.end(), comparePairs());
+	for (int x = 0; x < pairs.size(); x++)
+		for (int y = x+1; y < pairs.size(); y++)
+			if (pairs[x] == pairs[y])
+				pairs.erase(pairs.begin() + y);
 	for (int i = 0; i < pairs.size(); i++) {
 		if (distance(pairs[i].p1, pairs[i].p2) - distance(pairs[0].p1,pairs[0].p2) < .0000001)
 		{	
@@ -202,59 +205,6 @@ void printPairs(std::vector<Pair> pairs) {
 	}
 }
 
-void bruteForce(std::vector<Point> points) {
-	
-	std::vector<Pair> pairs;
-	double minDistance = DBL_MAX;
-	int n = points.size();
-	for (int i = 0; i < n; i++) {
-		for (int j = i+1; j < n; j++) {
-			if (fabs(distance(points[i],points[j]) - minDistance) < tolerance) //another min pair found, add to vector
-			{
-				if (points[i].x < points[j].x) //compare x values. i then j
-				{
-					pairs.push_back(Pair(points[i], points[j]));
-				}
-				else if (points[i].x > points[j].x) //j then i
-				{
-					pairs.push_back(Pair(points[j], points[i]));
-				}
-				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
-				{
-					pairs.push_back(Pair(points[i], points[j]));
-				}
-				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
-				{
-					pairs.push_back(Pair(points[j], points[i]));
-				}
-			}
-			else if (distance(points[i],points[j]) < minDistance) //new min found, clear vector
-			{
-			
-				minDistance = distance(points[i], points[j]);
-				pairs.clear();
-				if (points[i].x < points[j].x) //compare x values. i then j
-				{
-					pairs.push_back(Pair(points[i], points[j]));
-				}
-				else if (points[i].x > points[j].x) //j then i
-				{
-					pairs.push_back(Pair(points[j], points[i]));
-				}
-				else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
-				{
-					pairs.push_back(Pair(points[i], points[j]));
-				}
-				else if (points[i].x == points[j].x && points[i].y > points[j].y) 
-				{
-					pairs.push_back(Pair(points[j], points[i]));
-				}
-			}
-		}
-	}	
-	
-	return printPairs(pairs);
-}
 
 std::vector<Pair> bruteForcePairs(std::vector<Point> points)
 {
@@ -322,11 +272,72 @@ std::vector<Pair> stripClosest(std::vector<Point> points, int size, double d)
 			for (int j = i+1; j < size && (points[j].y - points[i].y) <= min; j++) {
 				if (fabs(distance(points[i],points[j]) - min) < tolerance) //another min pair found, add to vector
 				{
-					// std::cout << "same min dist found" << std::endl;
-				  //std::cout << "pushing pair ";
-				  // points[i].toString();
-				  // points[j].toString();
-			    // std:: cout <<std::endl;
+
+					if (points[i].x < points[j].x) //compare x values. i then j
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+						// std::cout << "pushing pair case 1" << std::endl;
+					}
+					else if (points[i].x > points[j].x) //j then i
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+						// std::cout << "pushing pair case 2" << std::endl;
+					}
+					else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+						// std::cout << "pushing pair case 3" << std::endl;
+					}
+					else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+						// std::cout << "pushing pair case 4" << std::endl;
+					}
+				}
+				else if (distance(points[i],points[j]) < min)
+				{
+				// 	std::cout << "new min found" << std::endl;
+				// 	min = distance(points[i], points[j]);
+				pairs.clear();
+				// 	std::cout << "cleared vector" << std::endl;
+				// 	std::cout << "pushing pair ";
+				// points[i].toString();
+				// points[j].toString();
+				//std:: cout <<std::endl;
+					if (points[i].x < points[j].x) //compare x values. i then j
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x > points[j].x) //j then i
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+					else if (points[i].x == points[j].x && points[i].y < points[j].y) //compare y values if x are same
+					{
+						pairs.push_back(Pair(points[i], points[j]));
+					}
+					else if (points[i].x == points[j].x && points[i].y > points[j].y) 
+					{
+						pairs.push_back(Pair(points[j], points[i]));
+					}
+				}
+			}
+		}	
+	
+	//std::cout << "exit strip closest with vector sized " << pairs.size() << std::endl;
+	return pairs;	
+}
+
+std::vector<Pair> stripClosestOpt(std::vector<Point> points, int size, double d)
+{
+	// std::cout << "entered stripclosest with vector sized" << points.size() << std::endl;
+	double min = d;
+	std::vector<Pair> pairs;
+
+	for (int i = 0; i < size; i++) {
+			for (int j = i+1; j < size && (points[j].y - points[i].y) <= min; j++) {
+				if (fabs(distance(points[i],points[j]) - min) < tolerance) //another min pair found, add to vector
+				{
 
 					if (points[i].x < points[j].x) //compare x values. i then j
 					{
@@ -425,7 +436,7 @@ std::vector<Pair> basicSortRec(std::vector<Point> points) {
 		// middle.toString();
 		// std::cout << "\n";
 		// std::cout << "distance of points and middle is " << fabs(points[i].x - middle.x) << std::endl;
-		if ((fabs(points[i].x - middle.x)) <= distance(minBoth[0].p1, minBoth[0].p2) && points[i] != middle)
+		if ((fabs(points[i].x - middle.x)) <= distance(minBoth[0].p1, minBoth[0].p2))
 		{
 			strip.push_back(points[i]);
 			//std::cout << "pushed point ";
@@ -433,12 +444,60 @@ std::vector<Pair> basicSortRec(std::vector<Point> points) {
 		 //  std::cout << "\n";
 		}
 	}
-	if (!strip.empty())
-		strip.push_back(middle);
+	// if (!strip.empty())
+	// 	strip.push_back(middle);
 	//std::cout << "entered recursive strip"  << std::endl;
 	return minPair(minBoth, stripClosest(strip, strip.size(), distance(minBoth[0].p1, minBoth[0].p2)));
 
 }
+
+std::vector<Pair> optimalSortRec(std::vector<Point> pointsx, std::vector<Point> pointsy)
+{
+
+	if (pointsx.size() <= 3)
+	{
+		return bruteForcePairs(pointsx);
+	}
+
+	int mid = pointsx.size()/2;
+	Point middle = pointsx[mid];
+
+	std::vector<Point>::const_iterator first = pointsx.begin();
+	std::vector<Point>::const_iterator last  = pointsx.begin() + mid;
+
+	std::vector<Point> leftX(first, last);
+	// std::cout <<"created leftX"<<std::endl;
+	std::vector<Point>::const_iterator first2 = pointsx.begin() + mid + 1;
+	std::vector<Point>::const_iterator last2  = pointsx.end();
+	// std::cout << "entered recursive left" << std::endl;
+	std::vector<Point> rightX(first2, last2);
+	// std::cout <<"created rightX"<<std::endl;
+	std::vector<Point> leftPointsY;
+	std::vector<Point> rightPointsY;
+	for (int i = 0; i < pointsy.size(); i++)
+	{
+		if (pointsy[i].x <= middle.x)
+			leftPointsY.push_back(pointsy[i]);
+		else
+			rightPointsY.push_back(pointsy[i]);
+	}
+
+	std::vector<Pair> minLeft = optimalSortRec(leftX,leftPointsY);
+	std::vector<Pair> minRight = optimalSortRec(rightX,rightPointsY);
+
+	std::vector<Pair> minBoth = minPair(minLeft, minRight);
+
+	std::vector<Point> strip;
+	for (int i = 0; i < pointsy.size(); i++)
+	{
+		if ((fabs(pointsy[i].x - middle.x)) <= distance(minBoth[0].p1, minBoth[0].p2))
+		{
+			strip.push_back(pointsy[i]);
+		}
+	}
+	return minPair(minBoth, stripClosestOpt(strip, strip.size(), distance(minBoth[0].p1, minBoth[0].p2)));
+}
+
 
 void basicSort(std::vector<Point> points)
 {
@@ -446,6 +505,17 @@ void basicSort(std::vector<Point> points)
 	std::sort(points.begin(), points.end(), compareX());
 
 	printPairs(basicSortRec(points));
+}
+
+void optimalSort(std::vector<Point> points)
+{
+	std::vector<Point> pointsx = points;
+	std::vector<Point> pointsy = points;
+
+	std::sort(pointsx.begin(), pointsx.end(), compareX());
+	std::sort(pointsy.begin(), pointsy.end(), compareY());
+
+	printPairs(optimalSortRec(pointsx, pointsy));
 }
 
 

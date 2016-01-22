@@ -68,6 +68,18 @@ int main(int argc, char *argv[]) {
 		}
 		else if (option == "optimal")
 		{
-			std::cout << distance(Point(9636.54, 1379.17), Point(9641.42, 3404.37)) << std::endl;
+			std::vector<Point> result = getPoints();
+			if (result.size() < 2)
+			{
+				std::cout << "Not enough points to compute closest pair. Program closing." << std::endl;
+				return -1;
+			}
+
+			else
+			{
+				//std::cout << "entering basic sort alg" << std::endl;
+		    optimalSort(result);
+		    return -1;
+			}
 		}
 	}

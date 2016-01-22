@@ -14,7 +14,7 @@ void randomInput(long int n)
 	srand(time(NULL));
 	int min = -10000;
 	int max = 10000;
-	for (int i = 0; i < n; i++)
+	for (long int i = 0; i < n; i++)
 	{
 		std::cout << min + (max - min)*(double)rand() / RAND_MAX << " " 
 		<< min + (max - min)*(double)rand() / RAND_MAX << std::endl;
