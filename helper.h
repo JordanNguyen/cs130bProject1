@@ -9,6 +9,7 @@
 #include <limits>
 #include <cfloat>
 #include <iomanip>
+#include <algorithm>
 #include "Point.h"
 #include "Pair.h"
 

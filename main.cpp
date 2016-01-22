@@ -5,6 +5,7 @@
 #include <sstream>
 #include <limits>
 #include <cfloat>
+#include <algorithm>
 #include "Point.h"
 #include "helper.h"
 #include "Pair.h"
