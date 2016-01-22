@@ -21,6 +21,21 @@ public:
 			return false;
 	}
 
+	bool operator<(const Pair &pair2) const
+	{
+		if (p1.x < pair2.p1.x)
+			return true;
+		else if (p1.x > pair2.p1.x)
+			return false;
+		else if (fabs(p1.x - pair2.p1.x) < .0000001)
+			{
+				if (p1.y < pair2.p1.y)
+					return true;
+				else
+					return false;
+			}
+	}
+
 };
 
 #endif

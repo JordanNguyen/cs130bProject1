@@ -29,6 +29,21 @@ public:
 		else
 			return true;
 	}
+
+	bool operator<(const Point &p1) const
+	{
+		if (x < p1.x)
+			return true;
+		else if (x > p1.x)
+			return false;
+		else if (fabs(x - p1.x) < .0000001)
+		{
+			if (y < p1.y)
+				return true;
+			else
+				return false;
+		}
+	}
 };
 
 #endif

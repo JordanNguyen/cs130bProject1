@@ -10,6 +10,7 @@
 #include <cfloat>
 #include <iomanip>
 #include <algorithm>
+#include <set>
 #include "Point.h"
 #include "Pair.h"
 
@@ -117,7 +118,7 @@ struct comparePairs
 			return true;
 		else if (pair1.p1.x > pair2.p1.x)
 			return false;
-		else if (fabs(pair1.p1.x - pair2.p2.x) < tolerance)
+		else if (fabs(pair1.p1.x - pair2.p1.x) < tolerance)
 			{
 				if (pair1.p1.y < pair2.p1.y)
 					return true;
@@ -154,6 +155,32 @@ bool containsPoint(std::vector<Point> points, Point p)
 	return false;
 }
 
+std::vector<Point> removeDupes(std::vector<Point> points)
+{
+
+	std::set<Point> s;
+	int size = points.size();
+	for (int i = 0; i < size; i++)
+		s.insert(points[i]);
+	points.assign(s.begin(), s.end());
+
+	return points;
+
+}
+
+std::vector<Pair> removeDupesPair(std::vector<Pair> points)
+{
+
+	std::set<Pair> s;
+	int size = points.size();
+	for (int i = 0; i < size; i++)
+		s.insert(points[i]);
+	points.assign(s.begin(), s.end());
+
+	return points;
+
+}
+
 std::vector<Point> getPoints() {
 
 	std::vector<Point> myVector;
@@ -178,13 +205,13 @@ std::vector<Point> getPoints() {
 			iss.clear();
 			continue;
 		}
-		if (containsPoint(myVector, Point(first,second)))
-			continue;
-		else
+		// if (containsPoint(myVector, Point(first,second)))
+		// 	continue;
+		// else
 			myVector.push_back(Point(first,second));
 	}
 
-	return myVector;
+	return removeDupes(myVector);
 }
 
 void printPairs(std::vector<Pair> pairs) {
@@ -192,11 +219,7 @@ void printPairs(std::vector<Pair> pairs) {
 	std::cout.precision(7);
 	// std::cout << "number of pairs: " << pairs.size() << std::endl;
 	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
-	std::sort(pairs.begin(), pairs.end(), comparePairs());
-	for (int x = 0; x < pairs.size(); x++)
-		for (int y = x+1; y < pairs.size(); y++)
-			if (pairs[x] == pairs[y])
-				pairs.erase(pairs.begin() + y);
+	pairs = removeDupesPair(pairs);
 	for (int i = 0; i < pairs.size(); i++) {
 		if (distance(pairs[i].p1, pairs[i].p2) - distance(pairs[0].p1,pairs[0].p2) < .0000001)
 		{	
