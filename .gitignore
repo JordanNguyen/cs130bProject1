@@ -1,6 +1,8 @@
 *closestPair
 randData
 *.txt
+/closestPair
+/randData
 
 # Compiled Object files
 *.slo

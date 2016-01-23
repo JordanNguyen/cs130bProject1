@@ -16,14 +16,6 @@
 
 const double tolerance = .0000001;
 
-double min(double x1, double x2)
-{
-	if (x1 <= x2)
-		return x1;
-	return x2;
-}
-
-
 double distance(Point p1, Point p2) {
 	
 	double xs = pow((p2.x - p1.x),2);
@@ -205,10 +197,8 @@ std::vector<Point> getPoints() {
 			iss.clear();
 			continue;
 		}
-		// if (containsPoint(myVector, Point(first,second)))
-		// 	continue;
-		// else
-			myVector.push_back(Point(first,second));
+		
+		myVector.push_back(Point(first,second));
 	}
 
 	return removeDupes(myVector);
@@ -216,10 +206,10 @@ std::vector<Point> getPoints() {
 
 void printPairs(std::vector<Pair> pairs) {
 	
-	std::cout.precision(7);
-	// std::cout << "number of pairs: " << pairs.size() << std::endl;
-	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	pairs = removeDupesPair(pairs);
+	std::sort(pairs.begin(), pairs.end(), comparePairs());
+	std::cout.precision(7);
+	std::cout << "closest pair distance: " << distance(pairs[0].p1,pairs[0].p2) << std::endl;
 	for (int i = 0; i < pairs.size(); i++) {
 		if (distance(pairs[i].p1, pairs[i].p2) - distance(pairs[0].p1,pairs[0].p2) < .0000001)
 		{	
@@ -320,14 +310,7 @@ std::vector<Pair> stripClosest(std::vector<Point> points, int size, double d)
 				}
 				else if (distance(points[i],points[j]) < min)
 				{
-				// 	std::cout << "new min found" << std::endl;
-				// 	min = distance(points[i], points[j]);
 				pairs.clear();
-				// 	std::cout << "cleared vector" << std::endl;
-				// 	std::cout << "pushing pair ";
-				// points[i].toString();
-				// points[j].toString();
-				//std:: cout <<std::endl;
 					if (points[i].x < points[j].x) //compare x values. i then j
 					{
 						pairs.push_back(Pair(points[i], points[j]));
@@ -386,14 +369,8 @@ std::vector<Pair> stripClosestOpt(std::vector<Point> points, int size, double d)
 				}
 				else if (distance(points[i],points[j]) < min)
 				{
-				// 	std::cout << "new min found" << std::endl;
-				// 	min = distance(points[i], points[j]);
 				pairs.clear();
-				// 	std::cout << "cleared vector" << std::endl;
-				// 	std::cout << "pushing pair ";
-				// points[i].toString();
-				// points[j].toString();
-				//std:: cout <<std::endl;
+		
 					if (points[i].x < points[j].x) //compare x values. i then j
 					{
 						pairs.push_back(Pair(points[i], points[j]));
@@ -454,23 +431,11 @@ std::vector<Pair> basicSortRec(std::vector<Point> points) {
 	// std::cout << "distance of minBoth is " << distance(minBoth[0].p1, minBoth[0].p2) << std::endl;
 	for (int i = 0; i < points.size(); i++)
 	{
-		// points[i].toString();
-		// std::cout << "\n";
-		// std::cout << "middle point is ";
-		// middle.toString();
-		// std::cout << "\n";
-		// std::cout << "distance of points and middle is " << fabs(points[i].x - middle.x) << std::endl;
 		if ((fabs(points[i].x - middle.x)) <= distance(minBoth[0].p1, minBoth[0].p2))
 		{
 			strip.push_back(points[i]);
-			//std::cout << "pushed point ";
-			// points[i].toString();
-		 //  std::cout << "\n";
 		}
 	}
-	// if (!strip.empty())
-	// 	strip.push_back(middle);
-	//std::cout << "entered recursive strip"  << std::endl;
 	return minPair(minBoth, stripClosest(strip, strip.size(), distance(minBoth[0].p1, minBoth[0].p2)));
 
 }
