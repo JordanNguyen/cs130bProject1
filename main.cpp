@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
 		{
 	    //bruteForce(result);
 	    printPairs(bruteForcePairs(result));
+	    return 0;
 	  //   std::sort(result.begin(), result.end(), compareY());
 			// for (int i = 0; i < result.size(); i++)
 			// {
@@ -64,6 +65,7 @@ int main(int argc, char *argv[]) {
 			{
 				//std::cout << "entering basic sort alg" << std::endl;
 		    basicSort(result);
+		    return 0;
 			}
 
 		}
@@ -80,7 +82,7 @@ int main(int argc, char *argv[]) {
 			{
 				//std::cout << "entering basic sort alg" << std::endl;
 		    optimalSort(result);
-		    return -1;
+		    return 0;
 			}
 		}
 	}
